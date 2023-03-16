@@ -9,7 +9,7 @@
 [![test](https://github.com/httpland/csp-middleware/actions/workflows/test.yaml/badge.svg)](https://github.com/httpland/csp-middleware/actions/workflows/test.yaml)
 [![NPM](https://nodei.co/npm/@httpland/csp-middleware.png?mini=true)](https://nodei.co/npm/@httpland/csp-middleware/)
 
-HTTP Content Security Policy (CSP) middleware.
+HTTP Content Security Policy(CSP) middleware.
 
 Compliant with
 [Content Security Policy Level 3](https://w3c.github.io/webappsec-csp/).
