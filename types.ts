@@ -171,7 +171,7 @@ export interface DocumentDirectives {
   /** It specifies an HTML sandbox policy which the user agent will apply to a resource, just as though it had been included in an [iframe](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element) with a [sandbox](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox) property.
    * @see https://www.w3.org/TR/CSP/#directive-sandbox
    */
-  readonly sandbox?: string;
+  readonly sandbox?: Sandbox;
 }
 
 /**
@@ -233,5 +233,23 @@ export type CSPDirectives =
   & DocumentDirectives
   & NavigationDirectives
   & ReportingDirectives;
+
+/**
+ * @see https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox
+ */
+export type Sandbox =
+  | "allow-downloads"
+  | "allow-forms"
+  | "allow-modals"
+  | "allow-orientation-lock"
+  | "allow-pointer-lock"
+  | "allow-popups"
+  | "allow-popups-to-escape-sandbox"
+  | "allow-presentation"
+  | "allow-same-origin"
+  | "allow-scripts"
+  | "allow-top-navigation"
+  | "allow-top-navigation-by-user-activation"
+  | "allow-top-navigation-to-custom-protocols";
 
 export type CSPValue = ValueOf<CSPDirectives>;

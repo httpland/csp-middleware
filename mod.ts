@@ -18,6 +18,7 @@ export type {
   NonceSource,
   OtherDirectives,
   ReportingDirectives,
+  Sandbox,
   SchemeSource,
   SerializedSourceList,
   SourceExpression,
