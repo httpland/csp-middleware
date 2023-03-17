@@ -2,7 +2,7 @@
 // This module is browser compatible.
 
 import { CSPDirectives } from "./types.ts";
-import { stringify } from "./csp.ts";
+import { isCSPFormat, stringify } from "./csp.ts";
 import { CSPHeader, type Middleware, withHeader } from "./deps.ts";
 
 export interface Options {
@@ -36,9 +36,16 @@ export interface Options {
  *   "default-src 'self'"
  * );
  * ```
+ *
+ * @throws {TypeError} If the serialized CSP is invalid format.
  */
 export function csp(directives: CSPDirectives, options?: Options): Middleware {
   const fieldValue = stringify(directives);
+
+  if (!isCSPFormat(fieldValue)) {
+    throw TypeError(Msg.InvalidSerializedCsp);
+  }
+
   const { reportOnly = false } = options ?? {};
   const fieldName = reportOnly
     ? CSPHeader.ContentSecurityPolicyReportOnly
@@ -49,4 +56,8 @@ export function csp(directives: CSPDirectives, options?: Options): Middleware {
 
     return withHeader(response, fieldName, fieldValue);
   };
+}
+
+const enum Msg {
+  InvalidSerializedCsp = "invalid serialized CSP format.",
 }

@@ -1,6 +1,12 @@
 import { csp } from "./middleware.ts";
 import { type CSPDirectives } from "./types.ts";
-import { assert, describe, equalsResponse, it } from "./_dev_deps.ts";
+import {
+  assert,
+  assertThrows,
+  describe,
+  equalsResponse,
+  it,
+} from "./_dev_deps.ts";
 
 describe("csp", () => {
   it("should return response what include csp header", async () => {
@@ -83,5 +89,9 @@ describe("csp", () => {
         ),
       );
     }));
+  });
+
+  it("should throw error if serialized csp list is invalid", () => {
+    assertThrows(() => csp({}));
   });
 });

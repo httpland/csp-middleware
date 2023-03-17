@@ -79,6 +79,21 @@ yield:
 Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'self'; form-action 'self';
 ```
 
+## Throwing error
+
+[CSP directives](#csp-directives) are serialized.
+
+If the CSP does not follow
+[`<serialized-policy-list>`](https://w3c.github.io/webappsec-csp/#grammardef-serialized-policy-list),
+it throws a TypeError.
+
+```ts
+import { csp } from "https://deno.land/x/csp_middleware@$VERSION/mod.ts";
+import { assertThrows } from "https://deno.land/std/testing/asserts.ts";
+
+assertThrows(() => csp({}));
+```
+
 ## Report only
 
 With the `reportOnly` flag, switches `Content-Security-Policy` to

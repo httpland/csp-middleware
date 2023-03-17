@@ -1,5 +1,5 @@
-import { assertEquals, describe, it } from "./_dev_deps.ts";
-import { stringify, stringifyValue } from "./csp.ts";
+import { assert, assertEquals, describe, it } from "./_dev_deps.ts";
+import { isCSPFormat, stringify, stringifyValue } from "./csp.ts";
 import type { CSPDirectives, CSPValue } from "./types.ts";
 
 describe("stringify", () => {
@@ -35,6 +35,38 @@ describe("stringifyValue", () => {
 
     table.forEach(([value, expected]) => {
       assertEquals(stringifyValue(value), expected);
+    });
+  });
+});
+
+describe("isCSPFormat", () => {
+  it("should return true if the input is CSP format", () => {
+    const table: string[] = [
+      "default-src 'self'",
+      " default-src 'self' ",
+      "default-src 'self'; script-src 'none'",
+      "a",
+      "a;",
+      "a; b",
+      "a; b b",
+      "a; b b b",
+    ];
+
+    table.forEach((input) => {
+      assert(isCSPFormat(input));
+    });
+  });
+
+  it("should return false if the input is not CSP format", () => {
+    const table: string[] = [
+      "",
+      "    ",
+      "?",
+      "あ",
+    ];
+
+    table.forEach((input) => {
+      assert(!isCSPFormat(input));
     });
   });
 });
