@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "https://deno.land/x/csp_middleware@$VERSION/": "./"
+  }
+}
