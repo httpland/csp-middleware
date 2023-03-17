@@ -44,5 +44,9 @@ export const makeOptions = (version: string): BuildOptions => ({
       name: "kebab-case",
       version: "1.0.2",
     },
+    "https://deno.land/x/http_middleware@1.0.0/mod.ts": {
+      name: "@httpland/http-middleware",
+      version: "1.0.0",
+    },
   },
 });
