@@ -3,7 +3,7 @@
 
 import { CSPDirectives } from "./types.ts";
 import { stringify } from "./csp.ts";
-import { type Middleware, withHeader } from "./deps.ts";
+import { CSPHeader, type Middleware, withHeader } from "./deps.ts";
 
 export interface Options {
   /** Switch header to report only.
@@ -48,9 +48,4 @@ export function csp(directives: CSPDirectives, options?: Options): Middleware {
 
     return withHeader(response, fieldName, fieldValue);
   };
-}
-
-enum CSPHeader {
-  ContentSecurityPolicy = "content-security-policy",
-  ContentSecurityPolicyReportOnly = "content-security-policy-report-only",
 }

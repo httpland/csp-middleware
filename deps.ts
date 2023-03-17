@@ -21,3 +21,8 @@ export function withHeader<T extends Headered>(
 }
 
 export type ValueOf<T> = T[keyof T];
+
+export const enum CSPHeader {
+  ContentSecurityPolicy = "content-security-policy",
+  ContentSecurityPolicyReportOnly = "content-security-policy-report-only",
+}
