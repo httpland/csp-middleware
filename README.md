@@ -38,7 +38,8 @@ const middleware = csp(directives);
 const response = await middleware(request, handler);
 
 assertEquals(
-  response.headers.get("content-security-policy", "default-src 'self'"),
+  response.headers.get("content-security-policy"),
+  "default-src 'self'",
 );
 ```
 
@@ -88,6 +89,7 @@ import {
   csp,
   type CSPDirectives,
 } from "https://deno.land/x/csp_middleware@$VERSION/mod.ts";
+import { assert } from "https://deno.land/std/testing/asserts.ts";
 
 declare const directives: CSPDirectives;
 declare const request: Request;
@@ -96,7 +98,7 @@ declare const handler: (request: Request) => Response;
 const middleware = csp(directives, { reportOnly: true });
 const response = await middleware(request, handler);
 
-assertEquals(response.headers.has("content-security-policy-report-only"));
+assert(response.headers.has("content-security-policy-report-only"));
 ```
 
 ## Effects

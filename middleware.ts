@@ -32,7 +32,8 @@ export interface Options {
  * const response = await middleware(request, handler);
  *
  * assertEquals(
- *   response.headers.get("content-security-policy", "default-src 'self'"),
+ *   response.headers.get("content-security-policy"),
+ *   "default-src 'self'"
  * );
  * ```
  */
