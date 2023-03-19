@@ -2,7 +2,7 @@
 // This module is browser compatible.
 
 export { csp, type Options } from "./middleware.ts";
-export { type Middleware } from "./deps.ts";
+export { type Handler, type Middleware } from "./deps.ts";
 export type {
   AncestorSource,
   AncestorSourceList,

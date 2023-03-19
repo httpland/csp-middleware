@@ -5,6 +5,7 @@ import { CSPDirectives } from "./types.ts";
 import { assertCSPFormat, stringify } from "./csp.ts";
 import { CSPHeader, isString, type Middleware, withHeader } from "./deps.ts";
 
+/** Middleware options. */
 export interface Options {
   /** Switch header to report only.
    * - `true` - `Content-Security-Policy-Report-Only`
