@@ -2,8 +2,8 @@
 // This module is browser compatible.
 
 import { CSPDirectives } from "./types.ts";
-import { isCSPFormat, stringify } from "./csp.ts";
-import { CSPHeader, type Middleware, withHeader } from "./deps.ts";
+import { assertCSPFormat, stringify } from "./csp.ts";
+import { CSPHeader, isString, type Middleware, withHeader } from "./deps.ts";
 
 export interface Options {
   /** Switch header to report only.
@@ -39,25 +39,21 @@ export interface Options {
  *
  * @throws {TypeError} If the serialized CSP is invalid format.
  */
-export function csp(directives: CSPDirectives, options?: Options): Middleware {
-  const fieldValue = stringify(directives);
-
-  if (!isCSPFormat(fieldValue)) {
-    throw TypeError(Msg.InvalidSerializedCsp);
-  }
-
+export function csp(
+  directives: CSPDirectives | string,
+  options?: Options,
+): Middleware {
+  const fieldValue = isString(directives) ? directives : stringify(directives);
   const { reportOnly = false } = options ?? {};
   const fieldName = reportOnly
     ? CSPHeader.ContentSecurityPolicyReportOnly
     : CSPHeader.ContentSecurityPolicy;
+
+  assertCSPFormat(fieldValue);
 
   return async (request, next) => {
     const response = await next(request);
 
     return withHeader(response, fieldName, fieldValue);
   };
-}
-
-const enum Msg {
-  InvalidSerializedCsp = "invalid serialized CSP format.",
 }

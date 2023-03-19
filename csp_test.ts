@@ -50,6 +50,8 @@ describe("isCSPFormat", () => {
       "a; b",
       "a; b b",
       "a; b b b",
+      "default-src https://example.test/",
+      "default-src https://あ.test/",
     ];
 
     table.forEach((input) => {
@@ -63,6 +65,8 @@ describe("isCSPFormat", () => {
       "    ",
       "?",
       "あ",
+      ",",
+      ",,,",
     ];
 
     table.forEach((input) => {
