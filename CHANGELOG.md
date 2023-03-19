@@ -1,3 +1,12 @@
+# [1.0.0-beta.2](https://github.com/httpland/csp-middleware/compare/1.0.0-beta.1...1.0.0-beta.2) (2023-03-19)
+
+
+### Features
+
+* **middleware:** add asserting serialized CSP format ([4c438ad](https://github.com/httpland/csp-middleware/commit/4c438ade007c91781bff663dfe0625e3e89ee2ec))
+* **mod:** export middleware types ([7d66401](https://github.com/httpland/csp-middleware/commit/7d66401df82be9147ee3d5cf7eebf847182ea1cc))
+* **types:** improve csp interface ([56622c7](https://github.com/httpland/csp-middleware/commit/56622c7ccc4caf028c712cd74ecc9fca9d2a076f))
+
 # 1.0.0-beta.1 (2023-03-17)
 
 
