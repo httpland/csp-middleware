@@ -48,5 +48,9 @@ export const makeOptions = (version: string): BuildOptions => ({
       name: "@httpland/http-middleware",
       version: "1.0.0",
     },
+    "https://deno.land/x/isx@1.0.0-beta.24/mod.ts": {
+      name: "isxx",
+      version: "1.0.0-beta.24",
+    },
   },
 });
