@@ -8,6 +8,7 @@ import { type ValueOf } from "./deps.ts";
  */
 export type SerializedSourceList =
   | [SourceExpression, ...SourceExpression[]]
+  | SourceExpression
   | "'none'";
 
 /** Representation of [`<source-expression>`](https://www.w3.org/TR/CSP/#grammardef-source-expression).
@@ -15,8 +16,7 @@ export type SerializedSourceList =
  */
 export type SourceExpression =
   | SchemeSource
-  // deno-lint-ignore ban-types
-  | HostSource & {}
+  | HostSource
   | KeywordSource
   | NonceSource
   | HashSource;
@@ -29,7 +29,9 @@ export type SchemeSource = `${string}:`;
 /** Representation of [`<host-source>`](https://www.w3.org/TR/CSP/#grammardef-host-source).
  * @see https://www.w3.org/TR/CSP/#grammardef-host-source
  */
-export type HostSource = string;
+
+// deno-lint-ignore ban-types
+export type HostSource = string & {};
 
 /** Representation of [`<keyword-source>`](https://www.w3.org/TR/CSP/#grammardef-keyword-source).
  * @see https://www.w3.org/TR/CSP/#grammardef-keyword-source
@@ -194,6 +196,7 @@ export interface NavigationDirectives {
  */
 export type AncestorSourceList =
   | [AncestorSource, ...AncestorSource[]]
+  | AncestorSource
   | "'none'";
 
 /** Representation of [`<ancestor-source>`](https://www.w3.org/TR/CSP/#grammardef-ancestor-source).
