@@ -1,3 +1,10 @@
+# [1.0.0-beta.3](https://github.com/httpland/csp-middleware/compare/1.0.0-beta.2...1.0.0-beta.3) (2023-03-31)
+
+
+### Features
+
+* **middleware:** change middleware factory interface to accept policy ([8c6a2b7](https://github.com/httpland/csp-middleware/commit/8c6a2b7d89f071f7a65f6ffa47a4d3ce87fd23e2))
+
 # [1.0.0-beta.2](https://github.com/httpland/csp-middleware/compare/1.0.0-beta.1...1.0.0-beta.2) (2023-03-19)
 
 
