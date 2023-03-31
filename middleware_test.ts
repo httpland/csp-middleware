@@ -2,6 +2,7 @@ import { csp } from "./middleware.ts";
 import { type CSPDirectives } from "./types.ts";
 import {
   assert,
+  assertIsError,
   assertThrows,
   describe,
   equalsResponse,
@@ -95,5 +96,21 @@ describe("csp", () => {
   it("should throw error if policy.directives is invalid", () => {
     assertThrows(() => csp({ directives: "" }));
     assertThrows(() => csp({ directives: {} }));
+  });
+
+  it("should be error message", () => {
+    let err;
+
+    try {
+      csp({ directives: "?" });
+    } catch (e) {
+      err = e;
+    } finally {
+      assertIsError(
+        err,
+        TypeError,
+        `invalid <serialized-policy-list> format. "?"`,
+      );
+    }
   });
 });

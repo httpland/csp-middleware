@@ -18,6 +18,14 @@ const enum KeywordSource {
   WasmUnsafeEval = "'wasm-unsafe-eval'",
 }
 
+const enum ABNF {
+  SerializedPolicyList = "<serialized-policy-list>",
+}
+
+export const enum Msg {
+  InvalidSerializedPolicyList = `invalid ${ABNF.SerializedPolicyList} format.`,
+}
+
 /** The default {@link CSPDirectives}.
  * ```http
  * default-src 'none';

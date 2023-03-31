@@ -34,15 +34,3 @@ const ReCSP =
 export function isCSPFormat(input: string): boolean {
   return ReCSP.test(input);
 }
-
-/** Assert CSP format.
- * @throws {TypeError} If the input is not [`<serialized-csp-list>`](https://w3c.github.io/webappsec-csp/#grammardef-serialized-policy-list).
- */
-export function assertCSPFormat(
-  input: string,
-  msg = "invalid serialized CSP format.",
-): asserts input {
-  if (!isCSPFormat(input)) {
-    throw TypeError(msg);
-  }
-}

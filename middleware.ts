@@ -2,14 +2,14 @@
 // This module is browser compatible.
 
 import { Policy } from "./types.ts";
-import { assertCSPFormat, stringify } from "./csp.ts";
+import { isCSPFormat, stringify } from "./csp.ts";
 import { isString, type Middleware } from "./deps.ts";
-import { CSPHeader, DEFAULT_POLICY } from "./constants.ts";
+import { CSPHeader, DEFAULT_POLICY, Msg } from "./constants.ts";
 import { withHeader } from "./utils.ts";
 
 /** Create `Content-Security-Policy` header field middleware.
  *
- * The default header is [Starter policy](https://content-security-policy.com/).:
+ * The default header is [Starter policy](https://content-security-policy.com/):
  * ```http
  * Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self';base-uri 'self';form-action 'self'
  * ```
@@ -43,7 +43,11 @@ export function csp(policy?: Partial<Policy>): Middleware {
     ? directives
     : stringify({ ...directives });
 
-  assertCSPFormat(fieldValue);
+  if (!isCSPFormat(fieldValue)) {
+    const message = `${Msg.InvalidSerializedPolicyList} "${fieldValue}"`;
+
+    throw TypeError(message);
+  }
 
   const fieldName = reportOnly
     ? CSPHeader.ContentSecurityPolicyReportOnly
