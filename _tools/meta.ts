@@ -40,7 +40,7 @@ export const makeOptions = (version: string): BuildOptions => ({
   },
   packageManager: "pnpm",
   mappings: {
-    "https://esm.sh/kebab-case@1.0.2?pin=v111": {
+    "https://esm.sh/kebab-case@1.0.2": {
       name: "kebab-case",
       version: "1.0.2",
     },
@@ -48,9 +48,10 @@ export const makeOptions = (version: string): BuildOptions => ({
       name: "@httpland/http-middleware",
       version: "1.0.0",
     },
-    "https://deno.land/x/isx@1.0.0-beta.24/mod.ts": {
-      name: "isxx",
-      version: "1.0.0-beta.24",
+    "https://deno.land/x/isx@1.1.1/is_string.ts": {
+      name: "@miyauci/isx",
+      version: "1.1.1",
+      subPath: "is_string",
     },
   },
 });

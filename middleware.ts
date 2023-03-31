@@ -3,8 +3,9 @@
 
 import { Policy } from "./types.ts";
 import { assertCSPFormat, stringify } from "./csp.ts";
-import { CSPHeader, isString, type Middleware, withHeader } from "./deps.ts";
-import { DEFAULT_POLICY } from "./constants.ts";
+import { isString, type Middleware } from "./deps.ts";
+import { CSPHeader, DEFAULT_POLICY } from "./constants.ts";
+import { withHeader } from "./utils.ts";
 
 /** Create `Content-Security-Policy` header field middleware.
  *

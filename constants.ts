@@ -3,6 +3,11 @@
 
 import { CSPDirectives, Policy } from "./types.ts";
 
+export const enum CSPHeader {
+  ContentSecurityPolicy = "content-security-policy",
+  ContentSecurityPolicyReportOnly = "content-security-policy-report-only",
+}
+
 const enum KeywordSource {
   Self = "'self'",
   UnsafeInline = "'unsafe-inline'",
