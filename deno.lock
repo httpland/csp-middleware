@@ -25,8 +25,8 @@
     "https://deno.land/x/prelude_js@1.0.0-beta.2/mod.ts": "b9795ef8d664f0d061e80c0788f7b13370f6cb6be7aaa4386f3ae10bc3cc7e96",
     "https://deno.land/x/prelude_js@1.0.0-beta.2/multiary.ts": "afd3991456cea084bc2f995bd56b780c358ceff9c1f292ab7dfa5496af5172a8",
     "https://deno.land/x/prelude_js@1.0.0-beta.2/unary.ts": "b79963a09af544cdbf81caf341fb25887a453670455a0808ce8c595bec4cc7e1",
-    "https://esm.sh/kebab-case@1.0.2": "f7c0c5187504cf4de130efa210bf7a3e8c2939366e4c3b630d785d8ee9c04ab9",
-    "https://esm.sh/v110/kebab-case@1.0.2/deno/kebab-case.js": "ea46f169f0752cb9c0018eb7508fbfcda9a9f7e948f31256e48ce89c4428d024",
-    "https://esm.sh/v110/kebab-case@1.0.2/index.d.ts": "72420c70ab27dcfa4162967d7ec46d0b9976c3232f78e3014eff70f3ffc1d9e9"
+    "https://esm.sh/kebab-case@1.0.2?pin=v111": "d32b2e361439c029ec001bf5d43c84bec04d566856ef3fbde8da17b7cabc5e35",
+    "https://esm.sh/v111/kebab-case@1.0.2/deno/kebab-case.js": "ea46f169f0752cb9c0018eb7508fbfcda9a9f7e948f31256e48ce89c4428d024",
+    "https://esm.sh/v111/kebab-case@1.0.2/index.d.ts": "72420c70ab27dcfa4162967d7ec46d0b9976c3232f78e3014eff70f3ffc1d9e9"
   }
 }

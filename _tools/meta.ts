@@ -40,7 +40,7 @@ export const makeOptions = (version: string): BuildOptions => ({
   },
   packageManager: "pnpm",
   mappings: {
-    "https://esm.sh/kebab-case@1.0.2": {
+    "https://esm.sh/kebab-case@1.0.2?pin=v111": {
       name: "kebab-case",
       version: "1.0.2",
     },
