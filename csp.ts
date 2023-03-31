@@ -1,11 +1,13 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-import type { CSPDirectives, CSPValue } from "./types.ts";
-import { isString, kebabCase, mapKeys, mapValues } from "./deps.ts";
+import type { CSPDirectives, CSPValues } from "./types.ts";
+import { isString, kebabCase, mapKeys, mapValues, ValueOf } from "./deps.ts";
 
 /** Serializes {@link CSPDirectives} into string. */
-export function stringify(directives: CSPDirectives): string {
+export function stringify(
+  directives: { [k: string]: ValueOf<CSPDirectives> },
+): string {
   const record = mapKeys(
     mapValues({ ...directives }, stringifyValue),
     kebabCase,
@@ -18,7 +20,7 @@ export function stringify(directives: CSPDirectives): string {
 }
 
 /** Serializes {@link CSPValue} into string. */
-export function stringifyValue(value: CSPValue): string {
+export function stringifyValue(value: CSPValues): string {
   if (isString(value)) return value;
 
   return value?.join(" ") ?? "";

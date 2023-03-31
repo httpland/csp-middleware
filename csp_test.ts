@@ -1,6 +1,6 @@
 import { assert, assertEquals, describe, it } from "./_dev_deps.ts";
 import { isCSPFormat, stringify, stringifyValue } from "./csp.ts";
-import type { CSPDirectives, CSPValue } from "./types.ts";
+import type { CSPDirectives, CSPValues } from "./types.ts";
 
 describe("stringify", () => {
   it("should return string if the directives is valid", () => {
@@ -18,14 +18,14 @@ describe("stringify", () => {
     ];
 
     table.forEach(([directives, expected]) => {
-      assertEquals(stringify(directives), expected);
+      assertEquals(stringify({ ...directives }), expected);
     });
   });
 });
 
 describe("stringifyValue", () => {
   it("should return string if the directives is valid", () => {
-    const table: [CSPValue, string][] = [
+    const table: [CSPValues, string][] = [
       ["abc", "abc"],
       [[`'self'`], "'self'"],
       [[`'self'`, `'strict-dynamic'`], "'self' 'strict-dynamic'"],

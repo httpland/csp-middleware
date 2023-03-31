@@ -9,6 +9,27 @@ import {
 } from "./_dev_deps.ts";
 
 describe("csp", () => {
+  it("should return response what include default csp header", async () => {
+    const middleware = csp();
+
+    const response = await middleware(
+      new Request("test:"),
+      () => new Response(),
+    );
+
+    assert(
+      await equalsResponse(
+        response,
+        new Response(null, {
+          headers: {
+            "content-security-policy":
+              "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'self'",
+          },
+        }),
+        true,
+      ),
+    );
+  });
   it("should return response what include csp header", async () => {
     const table: [CSPDirectives, Response][] = [
       [
@@ -33,7 +54,7 @@ describe("csp", () => {
     ];
 
     await Promise.all(table.map(async ([directives, expected]) => {
-      const middleware = csp(directives);
+      const middleware = csp({ directives });
       const response = await middleware(
         new Request("test:"),
         () => new Response(),
@@ -50,48 +71,29 @@ describe("csp", () => {
   });
 
   it("should return response what include csp report only header", async () => {
-    const table: [CSPDirectives, Response][] = [
-      [
-        { defaultSrc: ["'self'"] },
-        new Response(null, {
-          headers: {
-            "content-security-policy-report-only": "default-src 'self'",
-          },
-        }),
-      ],
-      [
-        {
-          defaultSrc: "'none'",
-          scriptSrc: ["https", "'unsafe-inline'"],
-          webrtc: "'block'",
-        },
+    const middleware = csp({ reportOnly: true });
+
+    const response = await middleware(
+      new Request("test:"),
+      () => new Response(),
+    );
+
+    assert(
+      await equalsResponse(
+        response,
         new Response(null, {
           headers: {
             "content-security-policy-report-only":
-              "default-src 'none'; script-src https 'unsafe-inline'; webrtc 'block'",
+              "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'self'",
           },
         }),
-      ],
-    ];
-
-    await Promise.all(table.map(async ([directives, expected]) => {
-      const middleware = csp(directives, { reportOnly: true });
-      const response = await middleware(
-        new Request("test:"),
-        () => new Response(),
-      );
-
-      assert(
-        await equalsResponse(
-          response,
-          expected,
-          true,
-        ),
-      );
-    }));
+        true,
+      ),
+    );
   });
 
-  it("should throw error if serialized csp list is invalid", () => {
-    assertThrows(() => csp({}));
+  it("should throw error if policy.directives is invalid", () => {
+    assertThrows(() => csp({ directives: "" }));
+    assertThrows(() => csp({ directives: {} }));
   });
 });

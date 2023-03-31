@@ -7,7 +7,7 @@ import { type ValueOf } from "./deps.ts";
  * @see https://w3c.github.io/webappsec-csp/#grammardef-serialized-source-list
  */
 export type SerializedSourceList =
-  | [SourceExpression, ...SourceExpression[]]
+  | SourceExpression[]
   | SourceExpression
   | "'none'";
 
@@ -255,4 +255,13 @@ export type Sandbox =
   | "allow-top-navigation-by-user-activation"
   | "allow-top-navigation-to-custom-protocols";
 
-export type CSPValue = ValueOf<CSPDirectives>;
+export type CSPValues = ValueOf<CSPDirectives>;
+
+/** A policy defines allowed and restricted behaviors of content security. */
+export interface Policy {
+  /** CSP directives.  */
+  readonly directives: CSPDirectives | string;
+
+  /** Whether the policy report only or not. */
+  readonly reportOnly: boolean;
+}
