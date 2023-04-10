@@ -17,6 +17,7 @@ export const enum Msg {
   InvalidVcharWithout = `invalid ${Abnf.Vchar} without ";" and "," format.`,
   InvalidDirectiveKey = `invalid ${Abnf.DirectiveKey} format.`,
   RequiredDirective = "one or more directives are required.",
+  DuplicatedDirectiveValue = "duplicated directive value.",
 }
 
 const enum KeywordSource {

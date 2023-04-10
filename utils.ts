@@ -27,12 +27,21 @@ export function stringifyDirectives(
     assertDirectiveName(input, `${Msg.InvalidDirectiveKey} "${input}"`)
   );
 
-  Object.values(normalized).flat().forEach((input) =>
-    assertDirectiveValue(
-      input,
-      `${Msg.InvalidVcharWithout} "${input}"`,
-    )
+  const values = Object.values(normalized);
+
+  values.flat().forEach((input) =>
+    assertDirectiveValue(input, `${Msg.InvalidVcharWithout} "${input}"`)
   );
+
+  values.forEach((values) => {
+    const duplicates = duplicate(values);
+
+    if (duplicates.length) {
+      throw Error(
+        `${Msg.DuplicatedDirectiveValue} ${duplicates.map(quoted).join(", ")}`,
+      );
+    }
+  });
 
   const joinBySpace = joinBy.bind(null, " ");
 
@@ -50,16 +59,9 @@ export function normalizeDirectives(
     string | string[]
   >;
 
-  const normalized = mapValues(
-    mapValues(mapKeys(filtered, kebabCase), ensureArray),
-    normalizeArray,
-  );
+  const normalized = mapValues(mapKeys(filtered, kebabCase), ensureArray);
 
   return normalized;
-}
-
-function normalizeArray<T>(input: readonly T[]): T[] {
-  return input.filter(Boolean);
 }
 
 function stringifyEntry(entry: readonly [key: string, value: string]): string {
@@ -105,7 +107,7 @@ function assertDirectiveName(input: string, message?: string): asserts input {
  * directive-value = *( required-ascii-whitespace / ( %x21-%x2B / %x2D-%x3A / %x3C-%x7E ) )
  * ```
  */
-const reDirectiveValue = /^[\x21-\x2B\x2D-\x3A\x3C-\x7E]*$/;
+const reDirectiveValue = /^[\x21-\x2B\x2D-\x3A\x3C-\x7E]+$/;
 
 export function isDirectiveValue(input: string): boolean {
   return reDirectiveValue.test(input);
@@ -115,4 +117,22 @@ function assertDirectiveValue(input: string, message?: string): asserts input {
   if (!isDirectiveValue(input)) {
     throw Error(message);
   }
+}
+
+/** Return duplicated elements. */
+export function duplicate<T>(input: readonly T[]): T[] {
+  const store = new Set<T>();
+  const duplicated = new Set<T>();
+
+  for (const value of input) {
+    const set = store.has(value) ? duplicated : store;
+
+    set.add(value);
+  }
+
+  return [...duplicated];
+}
+
+function quoted(input: string): string {
+  return `"${input}"`;
 }

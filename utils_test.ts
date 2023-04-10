@@ -7,6 +7,7 @@ import {
   it,
 } from "./_dev_deps.ts";
 import {
+  duplicate,
   ensureArray,
   isDirectiveName,
   isDirectiveValue,
@@ -29,6 +30,35 @@ describe("ensureArray", () => {
 
     table.forEach(([input, expected]) => {
       assertEquals(ensureArray(input), expected);
+    });
+  });
+});
+
+describe("duplicate", () => {
+  it("should return empty array if the input is not duplicated", () => {
+    const table: unknown[][] = [
+      [],
+      [1],
+      [1, 2],
+      [1, 2, 3],
+      [{}, {}, {}],
+    ];
+
+    table.forEach((input) => {
+      assertEquals(duplicate(input), []);
+    });
+  });
+
+  it("should return array what include duplicated members", () => {
+    const table: [unknown[], unknown[]][] = [
+      [["", ""], [""]],
+      [[1, 2, 3, 1, 2, 3], [1, 2, 3]],
+      [[1, 3, 3, 1, 2, 3], [3, 1]],
+      [[1, 2, 3, 2, 1], [2, 1]],
+    ];
+
+    table.forEach(([input, expected]) => {
+      assertEquals(duplicate(input), expected);
     });
   });
 });
@@ -63,7 +93,7 @@ describe("isDirectiveValue", () => {
   it("should return true", () => {
     const table: string[] = [
       "a",
-      "",
+      `abcdefghijklmnopqrstuvwxyz0123456789-!@#$%^&*()_+=-}{][|\\'":?/>.<`,
     ];
 
     table.forEach((input) => {
@@ -78,6 +108,7 @@ describe("isDirectiveValue", () => {
       ",",
       ",,",
       " ;;",
+      "",
       " ",
       "a b",
     ];
@@ -114,9 +145,9 @@ describe("normalizeDirectives", () => {
     ][] = [
       [{}, {}],
       [{ a: undefined }, {}],
-      [{ a: "", b: "" }, { a: [], b: [] }],
-      [{ a: [""], b: "" }, { a: [], b: [] }],
-      [{ a: ["", "", "", "a"], b: "" }, { a: ["a"], b: [] }],
+      [{ a: "", b: "" }, { a: [""], b: [""] }],
+      [{ a: [""], b: "" }, { a: [""], b: [""] }],
+      [{ a: ["", "", "", "a"], b: "" }, { a: ["", "", "", "a"], b: [""] }],
       [{ "a-b": "0", "aB": "1" }, { "a-b": ["1"] }],
       [{ "a-b": "0", "aB": "1", "A-b": ["2"] }, {
         "a-b": ["1"],
@@ -144,17 +175,17 @@ describe("stringifyDirectives", () => {
           "default-src": "'none'",
           "script-src": ["'self'", "https"],
           "img-src": ["cdn.test.com", "https"],
-          "x": "",
+          "x": "x",
         },
-        "default-src 'none'; script-src 'self' https; img-src cdn.test.com https; x",
+        "default-src 'none'; script-src 'self' https; img-src cdn.test.com https; x x",
       ],
       [
         {
-          "a": "",
-          "b": [""],
-          "c": "",
-          "d": [""],
-          "e": ["", ""],
+          "a": [],
+          "b": [],
+          "c": [],
+          "d": [],
+          "e": [],
         },
         "a; b; c; d; e",
       ],
@@ -173,6 +204,7 @@ describe("stringifyDirectives", () => {
     const table: Parameters<typeof stringifyDirectives>[0][] = [
       {},
       { "": "" },
+      { "a": [""] },
       { "a": ";" },
       { "a": "a ;b b" },
       { "a": "a ;b b" },
@@ -180,6 +212,7 @@ describe("stringifyDirectives", () => {
       { "a": ["a,"] },
       { "a": ["a,"] },
       { "a": ["a; a"] },
+      { "a": ["a", "a"] },
     ];
 
     table.forEach((input) => {
@@ -223,6 +256,22 @@ describe("stringifyDirectives", () => {
         err,
         Error,
         `invalid <VCHAR> without ";" and "," format. ","`,
+      );
+    }
+  });
+
+  it("should be error message if the value of normalized directive is duplicated", () => {
+    let err;
+
+    try {
+      stringifyDirectives({ "a": ["a", "b", "c", "b", "a"] });
+    } catch (e) {
+      err = e;
+    } finally {
+      assertIsError(
+        err,
+        Error,
+        `duplicated directive value. "b", "a"`,
       );
     }
   });
