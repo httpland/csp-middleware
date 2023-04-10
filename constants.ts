@@ -14,8 +14,36 @@ export const enum Msg {
   InvalidSerializedPolicyList = `invalid ${Abnf.SerializedPolicyList} format.`,
 }
 
-export const DEFAULT_DIRECTIVE =
-  "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'self'";
+const enum KeywordSource {
+  Self = "'self'",
+  UnsafeInline = "'unsafe-inline'",
+  StrictDynamic = "'strict-dynamic'",
+  UnsafeHashes = "'unsafe-hashes'",
+  ReportSample = "'report-sample'",
+  UnsafeAllowRedirects = "'unsafe-allow-redirects'",
+  WasmUnsafeEval = "'wasm-unsafe-eval'",
+}
+
+/** The default {@link CSPDirectives}.
+ * ```http
+ * default-src 'none';
+ * script-src 'self';
+ * connect-src 'self';
+ * img-src 'self';
+ * style-src 'self';
+ * base-uri 'self';
+ * form-action 'self'
+ * ```
+ */
+export const DEFAULT_DIRECTIVES = {
+  defaultSrc: "'none'",
+  scriptSrc: KeywordSource.Self,
+  connectSrc: KeywordSource.Self,
+  imgSrc: KeywordSource.Self,
+  styleSrc: KeywordSource.Self,
+  baseUri: KeywordSource.Self,
+  formAction: KeywordSource.Self,
+};
 
 /**
  * @see https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox

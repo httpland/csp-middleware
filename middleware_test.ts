@@ -93,22 +93,28 @@ describe("csp", () => {
   });
 
   it("should throw error if policy.directives is invalid", () => {
-    assertThrows(() => csp({ directives: "" }));
-    // assertThrows(() => csp({ directives: {} }));
+    assertThrows(() => csp({ directives: {} }));
+    assertThrows(() =>
+      csp({
+        directives: {
+          "default-src": ";",
+        },
+      })
+    );
   });
 
   it("should be error message", () => {
     let err;
 
     try {
-      csp({ directives: "?" });
+      csp({ directives: {} });
     } catch (e) {
       err = e;
     } finally {
       assertIsError(
         err,
-        TypeError,
-        `invalid <serialized-policy-list> format. "?"`,
+        Error,
+        `one or more directives are required.`,
       );
     }
   });

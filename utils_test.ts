@@ -7,53 +7,10 @@ import {
 } from "./_dev_deps.ts";
 import {
   ensureArray,
-  isCSPFormat,
   isDirectiveName,
   isDirectiveValue,
   stringifyDirectives,
 } from "./utils.ts";
-
-describe("isCSPFormat", () => {
-  it("should return true", () => {
-    const table: string[] = [
-      "default-src 'self'",
-      "default-src 'self'; script-src 'none'",
-      "default-src 'self' ",
-      "a",
-      "a;",
-      "a; b",
-      "a; b b",
-      "a; b b b",
-      `script-src 'unsafe-inline' 'unsafe-eval' 'self' data: https://www.google.com http://www.google-analytics.com/gtm/js  https://*.gstatic.com/feedback/ https://ajax.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.google.com; default-src 'self' * 127.0.0.1 https://[2a00:79e0:1b:2:b466:5fd9:dc72:f00e]/foobar; img-src https: data:; child-src data:; foobar-src 'foobar'; report-uri http://csp.example.c`,
-      `script-src 'strict-dynamic' 'nonce-rAnd0m123' 'unsafe-inline' http: https:; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; report-uri https://csp.example.com;`,
-    ];
-
-    table.forEach((input) => {
-      assert(isCSPFormat(input));
-    });
-  });
-
-  it("should return false", () => {
-    const table: string[] = [
-      "",
-      "    ",
-      "?",
-      "あ",
-      ";",
-      ";;",
-      " ;",
-      " ; ",
-      " ; ; ",
-      "'",
-      "''",
-      " default-src 'self'",
-    ];
-
-    table.forEach((input) => {
-      assert(!isCSPFormat(input));
-    });
-  });
-});
 
 describe("ensureArray", () => {
   it("should return array wrapped", () => {
