@@ -1,26 +1,20 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-export interface Cloneable {
-  clone(): this;
+import { Msg } from "./constants.ts";
+export function assertCSPFormat(input: string): asserts input {
+  if (!isCSPFormat(input)) {
+    const message = `${Msg.InvalidSerializedPolicyList} "${input}"`;
+
+    throw TypeError(message);
+  }
 }
 
-/** An object which contains a `headers` property which has a value of an
- * instance of {@linkcode Headers}, like {@linkcode Request} and
- * {@linkcode Response}. */
-export interface Headered {
-  readonly headers: Headers;
-}
+const ReCSP =
+  // deno-lint-ignore no-control-regex
+  /[\dA-Za-z-]+(?:[\x09\x0A\x0C\x0D ]+(?:[\x09\x0A\x0C\x0D ]+|([\x21-\x2B\x2D-\x3A\x3C-\x7E]))*)?(?:[\x09\x0A\x0C\x0D ]*;(?:[\x09\x0A\x0C\x0D ]*[\dA-Za-z-]+(?:[\x09\x0A\x0C\x0D ]+(?:[\x09\x0A\x0C\x0D ]+|([\x21-\x2B\x2D-\x3A\x3C-\x7E]))*)?)?)*(?:[\x09\x0A\x0C\x0D ]*,[\x09\x0A\x0C\x0D ]*[\dA-Za-z-]+(?:[\x09\x0A\x0C\x0D ]+(?:[\x09\x0A\x0C\x0D ]+|([\x21-\x2B\x2D-\x3A\x3C-\x7E]))*)?(?:[\x09\x0A\x0C\x0D ]*;(?:[\x09\x0A\x0C\x0D ]*[\dA-Za-z-]+(?:[\x09\x0A\x0C\x0D ]+(?:[\x09\x0A\x0C\x0D ]+|([\x21-\x2B\x2D-\x3A\x3C-\x7E]))*)?)?)*)*/;
 
-export function withHeader<T extends Headered & Cloneable>(
-  target: T,
-  field: string,
-  fieldValue: string,
-): T {
-  if (target.headers.has(field)) return target;
-
-  target = target.clone();
-  target.headers.set(field, fieldValue);
-
-  return target;
+/** Whether the input is Content-Security-Policy header value format or not. */
+export function isCSPFormat(input: string): boolean {
+  return ReCSP.test(input);
 }

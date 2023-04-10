@@ -1,11 +1,25 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-import { Policy } from "./types.ts";
-import { isCSPFormat, stringify } from "./csp.ts";
-import { isString, type Middleware } from "./deps.ts";
-import { CSPHeader, DEFAULT_POLICY, Msg } from "./constants.ts";
-import { withHeader } from "./utils.ts";
+import { type Middleware, withHeader } from "./deps.ts";
+import { CSPHeader, DEFAULT_DIRECTIVE } from "./constants.ts";
+import { assertCSPFormat } from "./utils.ts";
+
+/** Middleware options. */
+export interface Options {
+  /**
+   * @default {@link DEFAULT_DIRECTIVE}
+   */
+  readonly directives?: string;
+
+  /** Whether header is report-only or not.
+   * Depending on the value, the header will be:
+   * - `true`: `Content-Security-Policy-Report-Only`
+   * - `false`: `Content-Security-Policy`
+   * @default false
+   */
+  readonly reportOnly?: boolean;
+}
 
 /** Create `Content-Security-Policy` header field middleware.
  *
@@ -34,20 +48,12 @@ import { withHeader } from "./utils.ts";
  *
  * @throws {TypeError} If the serialized CSP is invalid [`<serialized-policy-list>`](https://w3c.github.io/webappsec-csp/#grammardef-serialized-policy-list) format.
  */
-export function csp(policy?: Partial<Policy>): Middleware {
+export function csp(options?: Options): Middleware {
   const {
-    directives = DEFAULT_POLICY.directives,
-    reportOnly = DEFAULT_POLICY.reportOnly,
-  } = policy ?? DEFAULT_POLICY;
-  const fieldValue = isString(directives)
-    ? directives
-    : stringify({ ...directives });
-
-  if (!isCSPFormat(fieldValue)) {
-    const message = `${Msg.InvalidSerializedPolicyList} "${fieldValue}"`;
-
-    throw TypeError(message);
-  }
+    directives = DEFAULT_DIRECTIVE,
+    reportOnly = false,
+  } = options ?? {};
+  const fieldValue = (assertCSPFormat(directives), directives);
 
   const fieldName = reportOnly
     ? CSPHeader.ContentSecurityPolicyReportOnly
@@ -55,6 +61,8 @@ export function csp(policy?: Partial<Policy>): Middleware {
 
   return async (request, next) => {
     const response = await next(request);
+
+    if (response.headers.has(fieldName)) return response;
 
     return withHeader(response, fieldName, fieldValue);
   };
