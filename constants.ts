@@ -16,3 +16,24 @@ export const enum Msg {
 
 export const DEFAULT_DIRECTIVE =
   "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'self'";
+
+/**
+ * @see https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox
+ */
+export enum SandboxAttribute {
+  AllowDownloads = "allow-downloads",
+  AllowForms = "allow-forms",
+  AllowModals = "allow-modals",
+  AllowOrientationLock = "allow-orientation-lock",
+  AllowPointerLock = "allow-pointer-lock",
+  AllowPopups = "allow-popups",
+  AllowPopupsToEscapeSandbox = "allow-popups-to-escape-sandbox",
+  AllowPresentation = "allow-presentation",
+  AllowSameOrigin = "allow-same-origin",
+  AllowScripts = "allow-scripts",
+  AllowTopNavigation = "allow-top-navigation",
+  AllowTopNavigationByUserActivation =
+    "allow-top-navigation-by-user-activation",
+  AllowTopNavigationToCustomProtocols =
+    "allow-top-navigation-to-custom-protocols",
+}

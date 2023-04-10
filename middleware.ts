@@ -1,16 +1,17 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-import { type Middleware, withHeader } from "./deps.ts";
+import { isString, type Middleware, withHeader } from "./deps.ts";
 import { CSPHeader, DEFAULT_DIRECTIVE } from "./constants.ts";
-import { assertCSPFormat } from "./utils.ts";
+import { assertCSPFormat, stringifyDirectives } from "./utils.ts";
+import type { Directives } from "./types.ts";
 
 /** Middleware options. */
 export interface Options {
   /**
    * @default {@link DEFAULT_DIRECTIVE}
    */
-  readonly directives?: string;
+  readonly directives?: string | Directives;
 
   /** Whether header is report-only or not.
    * Depending on the value, the header will be:
@@ -53,7 +54,9 @@ export function csp(options?: Options): Middleware {
     directives = DEFAULT_DIRECTIVE,
     reportOnly = false,
   } = options ?? {};
-  const fieldValue = (assertCSPFormat(directives), directives);
+  const fieldValue = isString(directives)
+    ? (assertCSPFormat(directives), directives)
+    : stringifyDirectives({ ...directives });
 
   const fieldName = reportOnly
     ? CSPHeader.ContentSecurityPolicyReportOnly
