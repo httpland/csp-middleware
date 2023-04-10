@@ -11,39 +11,59 @@ import {
   mapValues,
 } from "./deps.ts";
 
+/** Serialize structured directives into string.
+ * @throws {Error} If the directives include invalid member.
+ */
 export function stringifyDirectives(
   directives: { readonly [k: string]: readonly string[] | string | undefined },
 ): string {
-  const filtered = filterValues(directives, not(isUndefined)) as Record<
-    string,
-    string | readonly string[]
-  >;
-
-  const normalized = mapKeys(
-    mapValues(filtered, ensureArray),
-    kebabCase,
-  );
+  const normalized = normalizeDirectives(directives);
 
   if (!Object.keys(normalized).length) {
-    throw TypeError("one or more directives are required.");
+    throw Error(Msg.RequiredDirective);
   }
 
   Object.keys(normalized).forEach((input) =>
-    assertDirectiveName(input, "invalid <directive-key> format.")
+    assertDirectiveName(input, `${Msg.InvalidDirectiveKey} "${input}"`)
   );
 
   Object.values(normalized).flat().forEach((input) =>
-    assertDirectiveValue(input, "invalid <directive-value> format.")
+    assertDirectiveValue(
+      input,
+      `${Msg.InvalidVcharWithout} "${input}"`,
+    )
   );
 
   const joinBySpace = joinBy.bind(null, " ");
 
-  return Object.entries(mapValues(normalized, joinBySpace)).map(stringifyEntry)
+  return Object.entries(mapValues(normalized, joinBySpace))
+    .map(stringifyEntry)
+    .filter(Boolean)
     .join("; ");
 }
 
+export function normalizeDirectives(
+  directives: { readonly [k: string]: readonly string[] | string | undefined },
+): Record<string, string[]> {
+  const filtered = filterValues(directives, not(isUndefined)) as Record<
+    string,
+    string | string[]
+  >;
+
+  const normalized = mapValues(
+    mapValues(mapKeys(filtered, kebabCase), ensureArray),
+    normalizeArray,
+  );
+
+  return normalized;
+}
+
+function normalizeArray<T>(input: readonly T[]): T[] {
+  return input.filter(Boolean);
+}
+
 function stringifyEntry(entry: readonly [key: string, value: string]): string {
-  return `${entry[0]} ${entry[1]}`;
+  return entry.filter(Boolean).join(" ");
 }
 
 function joinBy(
@@ -85,9 +105,7 @@ function assertDirectiveName(input: string, message?: string): asserts input {
  * directive-value = *( required-ascii-whitespace / ( %x21-%x2B / %x2D-%x3A / %x3C-%x7E ) )
  * ```
  */
-const reDirectiveValue =
-  // deno-lint-ignore no-control-regex
-  /^([\x09\x0A\x0C\x0D\x20]+|[\x21-\x2B\x2D-\x3A\x3C-\x7E])*$/;
+const reDirectiveValue = /^[\x21-\x2B\x2D-\x3A\x3C-\x7E]*$/;
 
 export function isDirectiveValue(input: string): boolean {
   return reDirectiveValue.test(input);

@@ -8,10 +8,15 @@ export const enum CSPHeader {
 
 const enum Abnf {
   SerializedPolicyList = "<serialized-policy-list>",
+  DirectiveKey = "<directive-key>",
+  Vchar = "<VCHAR>",
 }
 
 export const enum Msg {
   InvalidSerializedPolicyList = `invalid ${Abnf.SerializedPolicyList} format.`,
+  InvalidVcharWithout = `invalid ${Abnf.Vchar} without ";" and "," format.`,
+  InvalidDirectiveKey = `invalid ${Abnf.DirectiveKey} format.`,
+  RequiredDirective = "one or more directives are required.",
 }
 
 const enum KeywordSource {
