@@ -176,7 +176,7 @@ export interface NavigationDirectives {
   /** It restricts the [URL](https://url.spec.whatwg.org/#url)s which can embed the resource using [frame](https://html.spec.whatwg.org/multipage/obsolete.html#frame), [iframe](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element), [object](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-object-element), or [embed](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-embed-element).
    * @see https://www.w3.org/TR/CSP/#directive-frame-ancestors
    */
-  readonly "frame-ancestors"?: SourceList;
+  readonly "frame-ancestors"?: AncestorSourceList;
 }
 
 /** Various algorithms in this document hook into the reporting process by constructing a [violation](https://www.w3.org/TR/CSP/#violation) object via [2.4.2 Create a violation object for request, and policy](https://www.w3.org/TR/CSP/#create-violation-for-request).
