@@ -1,7 +1,7 @@
 // Copyright 2023-latest the httpland authors. All rights reserved. MIT license.
 // This module is browser compatible.
 
-import { SandboxAttribute } from "./constants.ts";
+import { KeywordSource, SandboxAttribute } from "./constants.ts";
 import { CamelCasing } from "./deps.ts";
 
 /** Representation of [`<serialized-source-list>`](https://www.w3.org/TR/CSP/#grammardef-serialized-source-list).
@@ -18,7 +18,7 @@ export type SourceList =
 export type SourceExpression =
   | SchemeSource
   | HostSource
-  | KeywordSource
+  | `${KeywordSource}`
   | NonceSource
   | HashSource;
 
@@ -33,19 +33,6 @@ export type SchemeSource = `${string}:`;
 
 // deno-lint-ignore ban-types
 export type HostSource = string & {};
-
-/** Representation of [`<keyword-source>`](https://www.w3.org/TR/CSP/#grammardef-keyword-source).
- * @see https://www.w3.org/TR/CSP/#grammardef-keyword-source
- */
-export type KeywordSource =
-  | "'self'"
-  | "'unsafe-inline'"
-  | "'unsafe-eval'"
-  | "'strict-dynamic'"
-  | "'unsafe-hashes'"
-  | "'report-sample'"
-  | "'unsafe-allow-redirects'"
-  | "'wasm-unsafe-eval'";
 
 /** Representation of [`<nonce-source>`](https://www.w3.org/TR/CSP/#grammardef-nonce-source).
  * @see https://www.w3.org/TR/CSP/#grammardef-nonce-source
@@ -171,7 +158,10 @@ export interface DocumentDirectives {
   /** It specifies an HTML sandbox policy which the user agent will apply to a resource, just as though it had been included in an [iframe](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element) with a [sandbox](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox) property.
    * @see https://www.w3.org/TR/CSP/#directive-sandbox
    */
-  readonly sandbox?: `${SandboxAttribute}`;
+  readonly sandbox?: `${SandboxAttribute}` | [
+    `${SandboxAttribute}`,
+    ...`${SandboxAttribute}`[],
+  ];
 }
 
 /**
