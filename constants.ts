@@ -3,17 +3,16 @@
 
 export const enum CSPHeader {
   ContentSecurityPolicy = "content-security-policy",
-  ContentSecurityPolicyReportOnly = "content-security-policy-report-only",
+  ContentSecurityPolicyReportOnly =
+    `${CSPHeader.ContentSecurityPolicy}-report-only`,
 }
 
 const enum Abnf {
-  SerializedPolicyList = "<serialized-policy-list>",
   DirectiveKey = "<directive-key>",
   Vchar = "<VCHAR>",
 }
 
 export const enum Msg {
-  InvalidSerializedPolicyList = `invalid ${Abnf.SerializedPolicyList} format.`,
   InvalidVcharWithout = `invalid ${Abnf.Vchar} without ";" and "," format.`,
   InvalidDirectiveKey = `invalid ${Abnf.DirectiveKey} format.`,
   RequiredDirective = "one or more directives are required.",
