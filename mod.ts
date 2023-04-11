@@ -3,6 +3,7 @@
 
 export { csp, type Options } from "./middleware.ts";
 export { type Handler, type Middleware } from "./deps.ts";
+export { KeywordSource, SandboxAttribute } from "./constants.ts";
 export type {
   AncestorSource,
   AncestorSourceList,
@@ -14,7 +15,6 @@ export type {
   HashAlgorithm,
   HashSource,
   HostSource,
-  KeywordSource,
   NavigationDirectives,
   NonceSource,
   OtherDirectives,
