@@ -158,7 +158,7 @@ Errors are thrown in the following cases:
 - Directive key does not compliant with
   [`<directive-name>`](https://w3c.github.io/webappsec-csp/#grammardef-directive-name)
 - Directive value does not compliant with
-  [<`VCHAR`> without ";" and ","](https://w3c.github.io/webappsec-csp/#grammardef-directive-value)
+  [`<VCHAR>` without ";" and ","](https://w3c.github.io/webappsec-csp/#grammardef-directive-value)
 - Directive values has a duplicate value
 
 ```ts
