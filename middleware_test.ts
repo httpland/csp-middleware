@@ -8,8 +8,25 @@ import {
   it,
 } from "./_dev_deps.ts";
 import { CamelCasingCSPDirectives, CSPDirectives } from "./types.ts";
+import { CSPHeader } from "./constants.ts";
 
 describe("csp", () => {
+  it("should return same response if the response include the header", async () => {
+    const middleware = csp();
+    const initResponse = new Response(null, {
+      headers: {
+        [CSPHeader.ContentSecurityPolicy]: "",
+      },
+    });
+
+    const response = await middleware(
+      new Request("test:"),
+      () => initResponse,
+    );
+
+    assert(response === initResponse);
+  });
+
   it("should return response what include default csp header", async () => {
     const middleware = csp();
 
