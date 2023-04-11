@@ -1,10 +1,10 @@
-import { BuildOptions } from "https://deno.land/x/dnt@0.33.1/mod.ts";
+import { BuildOptions } from "https://deno.land/x/dnt@0.34.0/mod.ts";
 
 export const makeOptions = (version: string): BuildOptions => ({
   test: false,
   shims: {},
   compilerOptions: {
-    lib: ["dom", "esnext", "dom.iterable"],
+    lib: ["dom", "esnext"],
   },
   typeCheck: true,
   entryPoints: ["./mod.ts"],
@@ -12,16 +12,16 @@ export const makeOptions = (version: string): BuildOptions => ({
   package: {
     name: "@httpland/csp-middleware",
     version,
-    description: "HTTP Content Security Policy(CSP) middleware",
+    description: "HTTP content security policy(CSP) middleware",
     keywords: [
       "http",
       "middleware",
       "csp",
       "content-security-policy",
+      "csp",
+      "csp-level3",
       "fetch-api",
       "security",
-      "request",
-      "response",
     ],
     license: "MIT",
     homepage: "https://github.com/httpland/csp-middleware",
@@ -40,7 +40,7 @@ export const makeOptions = (version: string): BuildOptions => ({
   },
   packageManager: "pnpm",
   mappings: {
-    "https://esm.sh/kebab-case@1.0.2?pin=v111": {
+    "https://esm.sh/kebab-case@1.0.2?pin=v114": {
       name: "kebab-case",
       version: "1.0.2",
     },
@@ -52,6 +52,16 @@ export const makeOptions = (version: string): BuildOptions => ({
       name: "@miyauci/isx",
       version: "1.1.1",
       subPath: "is_string",
+    },
+    "https://deno.land/x/isx@1.1.1/is_undefined.ts": {
+      name: "@miyauci/isx",
+      version: "1.1.1",
+      subPath: "is_undefined",
+    },
+    "https://deno.land/x/http_utils@1.0.0/message.ts": {
+      name: "@httpland/http-utils",
+      version: "1.0.0",
+      subPath: "message.js",
     },
   },
 });
