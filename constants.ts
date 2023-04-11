@@ -20,9 +20,13 @@ export const enum Msg {
   DuplicatedDirectiveValue = "duplicated directive value.",
 }
 
-const enum KeywordSource {
+/** Representation of [`<keyword-source>`](https://www.w3.org/TR/CSP/#grammardef-keyword-source).
+ * @see https://www.w3.org/TR/CSP/#grammardef-keyword-source
+ */
+export enum KeywordSource {
   Self = "'self'",
   UnsafeInline = "'unsafe-inline'",
+  UnsafeEval = "'unsafe-eval'",
   StrictDynamic = "'strict-dynamic'",
   UnsafeHashes = "'unsafe-hashes'",
   ReportSample = "'report-sample'",
