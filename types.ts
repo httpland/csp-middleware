@@ -8,7 +8,7 @@ import { CamelCasing } from "./deps.ts";
  * @see https://w3c.github.io/webappsec-csp/#grammardef-serialized-source-list
  */
 export type SourceList =
-  | SourceExpression[]
+  | [SourceExpression, ...SourceExpression[]]
   | SourceExpression
   | "'none'";
 
