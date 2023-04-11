@@ -9,7 +9,7 @@
 [![test](https://github.com/httpland/csp-middleware/actions/workflows/test.yaml/badge.svg)](https://github.com/httpland/csp-middleware/actions/workflows/test.yaml)
 [![NPM](https://nodei.co/npm/@httpland/csp-middleware.png?mini=true)](https://nodei.co/npm/@httpland/csp-middleware/)
 
-HTTP Content Security Policy(CSP) middleware.
+HTTP content security policy(CSP) middleware.
 
 Compliant with
 [Content Security Policy Level 3](https://w3c.github.io/webappsec-csp/).
@@ -26,77 +26,150 @@ Middleware adds the `Content-Security-Policy` header to the response.
 ```ts
 import {
   csp,
-  type CSPDirectives,
+  type Handler,
 } from "https://deno.land/x/csp_middleware@$VERSION/mod.ts";
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assert } from "https://deno.land/std/testing/asserts.ts";
 
 declare const request: Request;
-declare const handler: (request: Request) => Response;
+declare const handler: Handler;
 
-const directives: CSPDirectives = { defaultSrc: ["'self'"] };
-const middleware = csp(directives);
+const middleware = csp();
 const response = await middleware(request, handler);
 
-assertEquals(
-  response.headers.get("content-security-policy", "default-src 'self'"),
-);
+assert(response.headers.has("content-security-policy"));
 ```
 
 yield:
 
 ```http
-Content-Security-Policy: default-src 'self'
+Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'self'
 ```
 
-## CSP directives
+The default header field value is compliant with
+[Content Security Policy (CSP)
+Quick Reference Guide, Stater policy](https://content-security-policy.com/).
+
+## Options
+
+Middleware factory takes following fields.
+
+| Name       | Type            | Description                            |
+| ---------- | --------------- | -------------------------------------- |
+| directives | `CSPDirectives` | CSP directives.                        |
+| reportOnly | `boolean`       | Whether the policy report only or not. |
+
+### Directives
+
+`directives` can be one of the following.
+
+- `CSPDirective`
+- Camel casing `CSPDirective`
+
+#### CSP directives
 
 `CSPDirectives` are structured `Content-Security-Policy` header field objects.
 
-You can declare a CSP directive with a camelCase key and type-safe.
-
-[OWASP recommendation](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html#basic-csp-policy):
+Base types are as follows:
 
 ```ts
-import {
-  type CSPDirectives,
-} from "https://deno.land/x/csp_middleware@$VERSION/mod.ts";
-
-const directives: CSPDirectives = {
-  defaultSrc: `'none'`,
-  scriptSrc: [`'self'`],
-  connectSrc: [`'self'`],
-  imgSrc: [`'self'`],
-  styleSrc: [`'self'`],
-  frameAncestors: [`'self'`],
-  formAction: [`'self'`],
-};
+interface Directives {
+  [k: string]: string | string[];
+}
 ```
 
-yield:
+Each key represents a directive name and each value represents a directive
+value.
 
-```http
-Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'self'; form-action 'self';
+The Directive supports all directives in
+[Content Security Policy Level 3](https://w3c.github.io/webappsec-csp/).
+
+Each directive may be restricted to a more strict type.
+
+For example, a `webrtc` directive is restricted to `'allow'` or `'block'`.
+
+```ts
+import { csp } from "https://deno.land/x/csp_middleware@$VERSION/middleware.ts";
+
+const middleware = csp({
+  directives: {
+    "default-src": "'none'",
+    webrtc: "'allow'",
+  },
+});
 ```
 
-## Report only
+Check [deno doc](https://doc.deno.land/https/deno.land/x/csp_middleware/mod.ts)
+for about `CSPDirectives`.
 
-With the `reportOnly` flag, switches `Content-Security-Policy` to
-`Content-Security-Policy-Report-Only` header.
+##### Camel casing
+
+The directive name can also be defined in camel case. Overloading makes it
+exclusive.
+
+```ts
+import { csp } from "https://deno.land/x/csp_middleware@$VERSION/middleware.ts";
+
+const middleware = csp({
+  directives: {
+    defaultSrc: "'none'",
+    scriptSrc: ["'self'", "*.example.test"],
+  },
+});
+```
+
+### Report Only
+
+The header field changes depending on the value of `reportOnly`.
+
+| Value   | Header field                        |
+| ------- | ----------------------------------- |
+| `true`  | Content-Security-Policy-Report-Only |
+| `false` | Content-Security-Policy             |
+
+The default `reportOnly` is `false`.
 
 ```ts
 import {
   csp,
-  type CSPDirectives,
+  type Handler,
 } from "https://deno.land/x/csp_middleware@$VERSION/mod.ts";
+import { assert } from "https://deno.land/std/testing/asserts.ts";
 
-declare const directives: CSPDirectives;
 declare const request: Request;
-declare const handler: (request: Request) => Response;
+declare const handler: Handler;
 
-const middleware = csp(directives, { reportOnly: true });
+const middleware = csp({ reportOnly: true });
 const response = await middleware(request, handler);
 
-assertEquals(response.headers.has("content-security-policy-report-only"));
+assert(response.headers.has("content-security-policy-report-only"));
+```
+
+### Serialization error
+
+[CSP directives](#csp-directives) will serialize into string.
+
+In Serialization, the directive name and directive value are validated based on
+[ABNF](https://w3c.github.io/webappsec-csp/#framework-directives). If they are
+invalid, an error may be thrown.
+
+Errors are thrown in the following cases:
+
+- None of the `directive` is present
+- Directive key does not compliant with
+  [`<directive-name>`](https://w3c.github.io/webappsec-csp/#grammardef-directive-name)
+- Directive value does not compliant with
+  [`<VCHAR>` without ";" and ","](https://w3c.github.io/webappsec-csp/#grammardef-directive-value)
+- Directive values has a duplicate value
+
+```ts
+import { csp } from "https://deno.land/x/csp_middleware@$VERSION/middleware.ts";
+import { assertThrows } from "https://deno.land/std/testing/asserts.ts";
+
+assertThrows(() => csp({ directives: {} }));
+assertThrows(() => csp({ directives: { defaultSrc: "<invalid>" } }));
+assertThrows(() =>
+  csp({ directives: { defaultSrc: ["<duplicate>", "<duplicate>"] } })
+);
 ```
 
 ## Effects
@@ -105,12 +178,21 @@ Middleware may make changes to the following elements of the HTTP message.
 
 - HTTP Headers
   - Content-Security-Policy
+  - Content-Security-Policy-Report-Only
 
 ## Conditions
 
-Middleware is executed if all of the following conditions are met:
+Middleware will execute if all of the following conditions are met:
+
+Depends on [reportOnly](#report-only):
 
 - `Content-Security-Policy` header does not exists in response
+- `Content-Security-Policy-Report-Only` header does not exists in response
+
+## API
+
+All APIs can be found in the
+[deno doc](https://doc.deno.land/https/deno.land/x/csp_middleware/mod.ts).
 
 ## License
 
