@@ -189,7 +189,7 @@ export interface ReportingDirectives {
    *
    * @see https://www.w3.org/TR/CSP/#directive-report-uri
    */
-  readonly "report-uri"?: [UriReference, ...UriReference[]];
+  readonly "report-uri"?: UriReference | [UriReference, ...UriReference[]];
 
   /** It defines a [reporting endpoint](https://www.w3.org/TR/reporting-1/#endpoint) to which violation reports ought to be sent [Reporting API](https://w3c.github.io/reporting/).
    * @see https://www.w3.org/TR/CSP/#directive-report-to
