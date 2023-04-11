@@ -12,3 +12,11 @@ export { mapValues } from "https://deno.land/std@0.182.0/collections/map_values.
 export { mapKeys } from "https://deno.land/std@0.182.0/collections/map_keys.ts";
 export { withHeader } from "https://deno.land/x/http_utils@1.0.0/message.ts";
 export { default as kebabCase } from "https://esm.sh/kebab-case@1.0.2?pin=v114";
+
+export type CamelCase<S extends string> = S extends `${infer L}${infer R}`
+  ? `${L}${(R extends `-${infer X}` ? CamelCase<Capitalize<X>> : CamelCase<R>)}`
+  : "";
+
+export type CamelCasing<T> = {
+  [k in keyof T as k extends string ? CamelCase<k> : k]: T[k];
+};

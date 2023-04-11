@@ -4,14 +4,18 @@
 import { type Middleware, withHeader } from "./deps.ts";
 import { CSPHeader, DEFAULT_DIRECTIVES } from "./constants.ts";
 import { stringifyDirectives } from "./utils.ts";
-import type { Directives } from "./types.ts";
+import type { CamelCasingCSPDirectives, CSPDirectives } from "./types.ts";
 
 /** Middleware options. */
-export interface Options {
-  /**
+export interface Options<
+  T extends CSPDirectives | CamelCasingCSPDirectives =
+    | CSPDirectives
+    | CamelCasingCSPDirectives,
+> {
+  /** Content security policy directives name and values pair.
    * @default {@link DEFAULT_DIRECTIVES}
    */
-  readonly directives?: Directives;
+  readonly directives?: T;
 
   /** Whether header is report-only or not.
    * Depending on the value, the header will be:
@@ -33,7 +37,6 @@ export interface Options {
  * ```ts
  * import {
  *   csp,
- *   type CSPDirectives,
  *   type Handler,
  * } from "https://deno.land/x/csp_middleware@$VERSION/mod.ts";
  * import { assert } from "https://deno.land/std/testing/asserts.ts";
@@ -47,8 +50,10 @@ export interface Options {
  * assert(response.headers.has("content-security-policy"));
  * ```
  *
- * @throws {TypeError} If the serialized CSP is invalid [`<serialized-policy-list>`](https://w3c.github.io/webappsec-csp/#grammardef-serialized-policy-list) format.
+ * @throws {Error} If the serialized CSP is invalid [`<serialized-policy-list>`](https://w3c.github.io/webappsec-csp/#grammardef-serialized-policy-list) format.
  */
+export function csp(options?: Options<CSPDirectives>): Middleware;
+export function csp(options?: Options<CamelCasingCSPDirectives>): Middleware;
 export function csp(options?: Options): Middleware {
   const {
     directives = DEFAULT_DIRECTIVES,

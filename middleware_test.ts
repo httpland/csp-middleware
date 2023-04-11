@@ -7,6 +7,7 @@ import {
   equalsResponse,
   it,
 } from "./_dev_deps.ts";
+import { CamelCasingCSPDirectives, CSPDirectives } from "./types.ts";
 
 describe("csp", () => {
   it("should return response what include default csp header", async () => {
@@ -30,45 +31,85 @@ describe("csp", () => {
       ),
     );
   });
-  // it("should return response what include csp header", async () => {
-  //   const table: [Partial<CSPDirectives>, Response][] = [
-  //     [
-  //       { defaultSrc: ["'self'"] },
-  //       new Response(null, {
-  //         headers: { "content-security-policy": "default-src 'self'" },
-  //       }),
-  //     ],
-  //     [
-  //       {
-  //         defaultSrc: "'none'",
-  //         scriptSrc: ["https", "'unsafe-inline'"],
-  //         webrtc: "'block'",
-  //       },
-  //       new Response(null, {
-  //         headers: {
-  //           "content-security-policy":
-  //             "default-src 'none'; script-src https 'unsafe-inline'; webrtc 'block'",
-  //         },
-  //       }),
-  //     ],
-  //   ];
+  it("should return response what include csp header", async () => {
+    const table: [CamelCasingCSPDirectives, Response][] = [
+      [
+        { defaultSrc: ["'self'"] },
+        new Response(null, {
+          headers: { "content-security-policy": "default-src 'self'" },
+        }),
+      ],
+      [
+        {
+          defaultSrc: "'none'",
+          scriptSrc: ["https", "'unsafe-inline'"],
+          webrtc: "'block'",
+        },
+        new Response(null, {
+          headers: {
+            "content-security-policy":
+              "default-src 'none'; script-src https 'unsafe-inline'; webrtc 'block'",
+          },
+        }),
+      ],
+    ];
 
-  //   await Promise.all(table.map(async ([directives, expected]) => {
-  //     const middleware = csp({ directives });
-  //     const response = await middleware(
-  //       new Request("test:"),
-  //       () => new Response(),
-  //     );
+    await Promise.all(table.map(async ([directives, expected]) => {
+      const middleware = csp({ directives });
+      const response = await middleware(
+        new Request("test:"),
+        () => new Response(),
+      );
 
-  //     assert(
-  //       await equalsResponse(
-  //         response,
-  //         expected,
-  //         true,
-  //       ),
-  //     );
-  //   }));
-  // });
+      assert(
+        await equalsResponse(
+          response,
+          expected,
+          true,
+        ),
+      );
+    }));
+  });
+
+  it("should return response what include csp header with kebab case", async () => {
+    const table: [CSPDirectives, Response][] = [
+      [
+        { "default-src": ["'self'"] },
+        new Response(null, {
+          headers: { "content-security-policy": "default-src 'self'" },
+        }),
+      ],
+      [
+        {
+          "default-src": "'none'",
+          "script-src": ["https", "'unsafe-inline'"],
+          webrtc: "'block'",
+        },
+        new Response(null, {
+          headers: {
+            "content-security-policy":
+              "default-src 'none'; script-src https 'unsafe-inline'; webrtc 'block'",
+          },
+        }),
+      ],
+    ];
+
+    await Promise.all(table.map(async ([directives, expected]) => {
+      const middleware = csp({ directives });
+      const response = await middleware(
+        new Request("test:"),
+        () => new Response(),
+      );
+
+      assert(
+        await equalsResponse(
+          response,
+          expected,
+          true,
+        ),
+      );
+    }));
+  });
 
   it("should return response what include csp report only header", async () => {
     const middleware = csp({ reportOnly: true });

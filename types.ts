@@ -2,6 +2,7 @@
 // This module is browser compatible.
 
 import { SandboxAttribute } from "./constants.ts";
+import { CamelCasing } from "./deps.ts";
 
 /** Representation of [`<serialized-source-list>`](https://www.w3.org/TR/CSP/#grammardef-serialized-source-list).
  * @see https://w3c.github.io/webappsec-csp/#grammardef-serialized-source-list
@@ -155,7 +156,7 @@ export interface OtherDirectives {
   /** It restricts the URLs which may be loaded as a [Worker](https://html.spec.whatwg.org/multipage/workers.html#worker), [SharedWorker](https://html.spec.whatwg.org/multipage/workers.html#sharedworker), or [ServiceWorker](https://www.w3.org/TR/service-workers/#serviceworker).
    * @see https://www.w3.org/TR/CSP/#directive-worker-src
    */
-  readonly workerSrc?: SourceList;
+  readonly "worker-src"?: SourceList;
 }
 
 /** It governs the properties of a document or worker environment to which a policy applies.
@@ -165,7 +166,7 @@ export interface DocumentDirectives {
   /** It restricts the [URL](https://url.spec.whatwg.org/#url)s which can be used in a [Document](https://dom.spec.whatwg.org/#document)'s [base](https://html.spec.whatwg.org/multipage/semantics.html#the-base-element) element.
    * @see https://www.w3.org/TR/CSP/#directive-base-uri
    */
-  readonly baseUri?: SourceList;
+  readonly "base-uri"?: SourceList;
 
   /** It specifies an HTML sandbox policy which the user agent will apply to a resource, just as though it had been included in an [iframe](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element) with a [sandbox](https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox) property.
    * @see https://www.w3.org/TR/CSP/#directive-sandbox
@@ -224,9 +225,13 @@ export type AncestorSource = SchemeSource | HostSource | "'self'";
  */
 export type UriReference = string;
 
-export type Directives =
+/** Content security policy directive name and directive values pair. */
+export type CSPDirectives =
   | FetchDirectives
   | OtherDirectives
   | NavigationDirectives
   | DocumentDirectives
   | ReportingDirectives;
+
+/** Camel casing {@link CSPDirectives}. */
+export type CamelCasingCSPDirectives = CamelCasing<CSPDirectives>;
