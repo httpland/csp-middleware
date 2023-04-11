@@ -55,7 +55,7 @@ export const DEFAULT_DIRECTIVES = {
   formAction: KeywordSource.Self,
 };
 
-/**
+/** The `sandbox` attribute.
  * @see https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox
  */
 export enum SandboxAttribute {

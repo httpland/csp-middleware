@@ -54,6 +54,9 @@ export type HashSource = `'${HashAlgorithm}-${Base64Value}'`;
  */
 export type HashAlgorithm = "sha256" | "sha384" | "sha512";
 
+/** Fetch directives control the locations from which certain resource types may be loaded.
+ * @see [Content Security Policy Level 3, 6.1. Fetch Directives](https://www.w3.org/TR/CSP/#directives-fetch)
+ */
 export interface FetchDirectives {
   /** It governs the creation of [child navigables](https://html.spec.whatwg.org/multipage/document-sequences.html#child-navigable) and Worker execution contexts. Represent `<child-src>`.
    * @see https://www.w3.org/TR/CSP/#directive-child-src
@@ -131,8 +134,7 @@ export interface FetchDirectives {
   readonly "style-src-attr"?: SourceList;
 }
 
-/**
- * @see https://www.w3.org/TR/CSP/#directives-other
+/** [Content Security Policy Level 3, 6.2. Other Directives](https://www.w3.org/TR/CSP/#directives-other)
  */
 export interface OtherDirectives {
   /** It restricts whether connections may be established via WebRTC.
@@ -164,8 +166,7 @@ export interface DocumentDirectives {
   ];
 }
 
-/**
- * @see https://www.w3.org/TR/CSP/#directives-navigation
+/** [Content Security Policy Level 3, 6.4. Navigation Directives](https://www.w3.org/TR/CSP/#directives-navigation)
  */
 export interface NavigationDirectives {
   /** It restricts the [URL](https://url.spec.whatwg.org/#url)s which can be used as the target of a form submissions from a given context.
