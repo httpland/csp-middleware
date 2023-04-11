@@ -1,3 +1,19 @@
+# [1.0.0-beta.5](https://github.com/httpland/csp-middleware/compare/1.0.0-beta.4...1.0.0-beta.5) (2023-04-11)
+
+
+### Bug Fixes
+
+* **constants:** add lack of member ([b15653f](https://github.com/httpland/csp-middleware/commit/b15653fc9e0ebd7831cc1ec0b7f3939b218e9d8d))
+* **types:** fix frame ancestors types ([7142fb5](https://github.com/httpland/csp-middleware/commit/7142fb54823ac9259912e6e70cc7d3ae440c4c6f))
+* **types:** fix types of source list ([cec4591](https://github.com/httpland/csp-middleware/commit/cec459116504d9dce15d21131ac30af9330b1fc6))
+
+
+### Features
+
+* **mod:** export related enum ([44d6c95](https://github.com/httpland/csp-middleware/commit/44d6c95d41d5fc8e2de5deecffc092dd5cd4067b))
+* **types:** expand report uri directive acceptable types ([0c9fdc4](https://github.com/httpland/csp-middleware/commit/0c9fdc48c33a922e513843357f0a80cbd236d625))
+* **types:** expand sandbox attribute acceptable types ([86f1d35](https://github.com/httpland/csp-middleware/commit/86f1d35c4d7e8c9df7f687f31ea5b1ae7557df2b))
+
 # [1.0.0-beta.4](https://github.com/httpland/csp-middleware/compare/1.0.0-beta.3...1.0.0-beta.4) (2023-04-11)
 
 
