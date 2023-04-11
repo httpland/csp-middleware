@@ -144,11 +144,11 @@ const response = await middleware(request, handler);
 assert(response.headers.has("content-security-policy-report-only"));
 ```
 
-### Serializing error
+### Serialization error
 
 [CSP directives](#csp-directives) will serialize into string.
 
-In Serializing, the directive name and directive value are validated based on
+In Serialization, the directive name and directive value are validated based on
 [ABNF](https://w3c.github.io/webappsec-csp/#framework-directives). If they are
 invalid, an error may be thrown.
 
